@@ -1,5 +1,6 @@
 package com.kacperkk.zadanie1
 
+import android.R.attr.onClick
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kacperkk.zadanie1.ui.theme.Zadanie1Theme
 
@@ -35,20 +39,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val navigationController = rememberNavController()
-            var title = "Doggos"
+            val navController = rememberNavController()
 
             MaterialTheme {
                 Scaffold(
+
                     topBar = {
                         TopAppBar(
                             onSettingsClick = {
                                 Log.d("TopAppBar", "Settings clicked")
-                                navigationController.navigate("settings")
+
+                                //navController.navigate("settings")
                             },
                             onProfileClick = {
                                 Log.d("TopAppBar", "Profile clicked")
-                                navigationController.navigate("profile")
+
+                                //navController.navigate("profile")
                             }
                         )
                     }
@@ -78,21 +84,4 @@ fun TopAppBar(onSettingsClick: () -> Unit, onProfileClick: () -> Unit) {
             }
         }
     )
-}
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Zadanie1Theme {
-        Greeting("Android")
-    }
 }
