@@ -20,9 +20,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.kacperkk.zadanie1.ui.theme.Zadanie1Theme
 
 
@@ -33,15 +35,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            val navigationController = rememberNavController()
+            var title = "Doggos"
+
             MaterialTheme {
                 Scaffold(
                     topBar = {
-                        TopAppBarExample(
+                        TopAppBar(
                             onSettingsClick = {
                                 Log.d("TopAppBar", "Settings clicked")
+                                navigationController.navigate("settings")
                             },
                             onProfileClick = {
                                 Log.d("TopAppBar", "Profile clicked")
+                                navigationController.navigate("profile")
                             }
                         )
                     }
@@ -55,7 +62,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarExample(onSettingsClick: () -> Unit, onProfileClick: () -> Unit) {
+fun TopAppBar(onSettingsClick: () -> Unit, onProfileClick: () -> Unit) {
     TopAppBar(
         title = {
             Text(text = "Doggos", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
