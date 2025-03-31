@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.kacperkk.zadanie1.ui.theme.Zadanie1Theme
 import androidx.compose.ui.text.style.TextAlign
+import com.kacperkk.zadanie1.ui.components.AppTopBar
 import com.kacperkk.zadanie1.ui.screens.DogListScreen
 
 
@@ -25,34 +26,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Zadanie1Theme {
-                TopAppBar()
+                AppTopBar()
                 DogListScreen()
             }
         }
     }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBar() {
-    TopAppBar(
-        title = {
-            Text(text = "Doggos", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
-        },
-        navigationIcon = {
-            val onSettingsClick: () -> Unit = { Log.d("Settings", "Settings clicked") }
-
-            IconButton(onClick = onSettingsClick) {
-                Icon(Icons.Default.Settings, contentDescription = "Settings")
-            }
-        },
-        actions = {
-            val onProfileClick: () -> Unit = { Log.d("Profile", "Profile clicked") }
-
-            IconButton(onClick = onProfileClick) {
-                Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
-            }
-        }
-    )
 }

@@ -43,6 +43,15 @@ fun DogListScreen() {
                 Dog(id = 2, name = "Pan Pumpernikiel", breed = "Jack Russel"),
                 Dog(id = 3, name = "Pan Pumpernikiel", breed = "Jack Russel"),
                 Dog(id = 4, name = "Pan Pumpernikiel", breed = "Jack Russel"),
+                Dog(id = 5, name = "Pan Pumpernikiel", breed = "Jack Russel", isFavorite = true),
+                Dog(id = 6, name = "Pan Pumpernikiel", breed = "Jack Russel", isFavorite = true),
+                Dog(id = 7, name = "Pan Pumpernikiel", breed = "Jack Russel", isFavorite = true),
+                Dog(id = 8, name = "Pan Pumpernikiel", breed = "Jack Russel", isFavorite = true),
+                Dog(id = 9, name = "Pan Pumpernikiel", breed = "Jack Russel", isFavorite = true),
+                Dog(id = 10, name = "Pan Pumpernikiel", breed = "Jack Russel", isFavorite = true),
+                Dog(id = 11, name = "Pan Pumpernikiel", breed = "Jack Russel"),
+                Dog(id = 12, name = "Pan Pumpernikiel", breed = "Jack Russel"),
+                Dog(id = 13, name = "Pan Pumpernikiel", breed = "Jack Russel"),
             )
         )
     }
@@ -96,7 +105,9 @@ fun DogListScreen() {
                 placeholderText = "Poszukaj lub dodaj pieska 🐕",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(8.dp),
+                onSearchClick = { Log.d("Search","Search clicked") },
+                onAddClick = { Log.d("Add","Add clicked") },
             )
 
             LazyColumn {

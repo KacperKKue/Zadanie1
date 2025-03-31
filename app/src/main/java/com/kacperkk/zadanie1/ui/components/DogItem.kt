@@ -11,14 +11,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,11 +44,17 @@ fun DogItem(
             .padding(8.dp)
     ) {
         // Ikonka placeholdera psa (zamiast zdjęcia)
+        // https://foso.github.io/Jetpack-Compose-Playground/foundation/shape/
         Box(
             modifier = Modifier
                 .size(48.dp)
-                .clip(CircleShape)
-                .background(Color.LightGray)
+                .clip(shape = RoundedCornerShape(10.dp))
+                .background(
+                    Brush.linearGradient(
+                        // #65558F, #EEB6E8F0, convert to rgb: 101, 85, 143, 238, 184, 224
+                        colors = listOf(Color(101, 85, 143), Color(238, 184, 224))
+                    )
+                )
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -56,7 +67,7 @@ fun DogItem(
             // Nazwa psa
             Text(
                 text = dog.name,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -75,13 +86,7 @@ fun DogItem(
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
             Icon(
-                painter = painterResource(
-                    id = if (dog.isFavorite) {
-                        R.drawable.btn_star_big_on
-                    } else {
-                        R.drawable.btn_star_big_off
-                    }
-                ),
+                imageVector = if (dog.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                 contentDescription = "Favorite"
             )
         }
@@ -92,7 +97,7 @@ fun DogItem(
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_menu_delete),
+                painter = painterResource(id = R.drawable.ic_delete),
                 contentDescription = "Delete"
             )
         }
