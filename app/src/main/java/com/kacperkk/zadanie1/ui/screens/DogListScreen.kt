@@ -29,13 +29,13 @@ import com.kacperkk.zadanie1.data.model.Dog
 import com.kacperkk.zadanie1.ui.components.DogItem
 import com.kacperkk.zadanie1.ui.components.SearchBar
 import android.util.Log
+import androidx.navigation.NavController
+import com.kacperkk.zadanie1.ui.components.Counter
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DogListScreen() {
-    // Tutaj normalnie dane mogłyby być pobierane z ViewModelu.
-    // Dla przykładu: val dogs by viewModel.dogs.collectAsState()
+fun DogListScreen(navConstroller: NavController) {
     var dogs by remember {
         mutableStateOf(
             listOf(
@@ -65,30 +65,20 @@ fun DogListScreen() {
                     Text(text = "Doggos", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
                 },
                 navigationIcon = {
-                    val onProfileClick: () -> Unit = { Log.d("Profile", "Profile clicked") }
+                    val onProfileClick: () -> Unit = { navConstroller.navigate("settings") }
 
                     IconButton(onClick = onProfileClick) {
                         Icon(Icons.Default.Settings, contentDescription = "Settings")
                     }
                 },
                 actions = {
-                    val onProfileClick: () -> Unit = { Log.d("Profile", "Profile clicked") }
+                    val onProfileClick: () -> Unit = { navConstroller.navigate("profile") }
 
                     IconButton(onClick = onProfileClick) {
                         Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
                     }
                 }
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                // Obsługa dodawania nowego psa
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_input_add),
-                    contentDescription = "Add Dog"
-                )
-            }
         }
     ) { paddingValues ->
         Column(
@@ -100,7 +90,6 @@ fun DogListScreen() {
                 searchQuery = searchQuery,
                 onSearchQueryChange = { query ->
                     searchQuery = query
-                    // Ewentualna obsługa filtrowania listy
                 },
                 placeholderText = "Poszukaj lub dodaj pieska 🐕",
                 modifier = Modifier
@@ -110,10 +99,20 @@ fun DogListScreen() {
                 onAddClick = { Log.d("Add","Add clicked") },
             )
 
+            Counter(
+                dogs = dogs
+            )
+
             LazyColumn {
-                items(dogs.size) { dog ->
+                val sortedDogs = dogs.sortedByDescending { it.isFavorite } // Ulubione na górze
+
+                items(sortedDogs.size) { index ->
                     DogItem(
-                        dog = dogs[dog],
+                        dog = sortedDogs[index],
+                        onDogClick = {
+                            Log.d("DogItem", "Dog clicked: ${sortedDogs[index].name}")
+                            navConstroller.navigate("dog_detail/${sortedDogs[index].id}")
+                        },
                         onFavoriteClick = { clickedDog ->
                             dogs = dogs.map {
                                 if (it.id == clickedDog.id) {
@@ -123,10 +122,12 @@ fun DogListScreen() {
                         },
                         onDeleteClick = { clickedDog ->
                             dogs = dogs.filter { it.id != clickedDog.id }
-                        }
+                        },
+                        navController = navConstroller
                     )
                 }
             }
+
         }
     }
 }

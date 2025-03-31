@@ -27,7 +27,6 @@ fun AppTopBar() {
             )
         },
         navigationIcon = {
-            // Przycisk Ustawień
             IconButton(onClick = { Log.d("Ustawienia", "Ustawienia") }) {
                 Icon(
                     imageVector = Icons.Default.Settings,
@@ -36,7 +35,6 @@ fun AppTopBar() {
             }
         },
         actions = {
-            // Przycisk Profilu
             IconButton(onClick = { Log.d("Profil", "Profil") }) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,

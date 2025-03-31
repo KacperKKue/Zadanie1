@@ -35,7 +35,6 @@ fun SearchBar(
             .padding(2.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Pole wyszukiwania
         OutlinedTextField(
             value = searchQuery,
             onValueChange = onSearchQueryChange,
@@ -54,7 +53,6 @@ fun SearchBar(
 
         Spacer(modifier = Modifier.width(4.dp))
 
-        // Przycisk wyszukiwania 🔍
         IconButton(
             onClick = onSearchClick,
             modifier = Modifier.size(48.dp)
@@ -68,7 +66,6 @@ fun SearchBar(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // Przycisk dodawania +
         IconButton(
             onClick = onAddClick,
             modifier = Modifier.size(48.dp)
