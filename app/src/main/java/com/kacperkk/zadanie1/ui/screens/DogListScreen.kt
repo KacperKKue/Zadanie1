@@ -29,6 +29,8 @@ import com.kacperkk.zadanie1.data.model.Dog
 import com.kacperkk.zadanie1.ui.components.DogItem
 import com.kacperkk.zadanie1.ui.components.SearchBar
 import android.util.Log
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.kacperkk.zadanie1.ui.components.Counter
 
@@ -36,7 +38,7 @@ import com.kacperkk.zadanie1.ui.components.Counter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DogListScreen(navConstroller: NavController) {
-    var dogs by remember {
+    var dogs by rememberSaveable {
         mutableStateOf(
             listOf(
                 Dog(id = 1, name = "Pan Pumpernikiel", breed = "Jack Russel"),
@@ -127,7 +129,6 @@ fun DogListScreen(navConstroller: NavController) {
                     )
                 }
             }
-
         }
     }
 }

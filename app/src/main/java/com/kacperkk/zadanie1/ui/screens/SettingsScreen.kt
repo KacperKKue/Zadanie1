@@ -30,7 +30,7 @@ fun SettingsScreen(navController: NavController) {
                     Text(text = "Ustawienia", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
                 },
                 navigationIcon = {
-                    val onProfileClick: () -> Unit = { navController.navigate("dog_list") }
+                    val onProfileClick: () -> Unit = { navController.popBackStack() }
 
                     IconButton(onClick = onProfileClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Settings")
