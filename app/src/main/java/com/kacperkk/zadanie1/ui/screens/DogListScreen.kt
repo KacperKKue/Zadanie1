@@ -37,7 +37,7 @@ import com.kacperkk.zadanie1.ui.components.Counter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DogListScreen(navConstroller: NavController) {
+fun DogListScreen(navController: NavController) {
     var dogs by rememberSaveable {
         mutableStateOf(
             listOf(
@@ -58,7 +58,10 @@ fun DogListScreen(navConstroller: NavController) {
         )
     }
 
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var appliedSearchQuery by rememberSaveable { mutableStateOf("") }
+    var isError by rememberSaveable { mutableStateOf(false) }
+    var buttonsEnabled: Boolean = false;
 
     Scaffold(
         topBar = {
@@ -67,14 +70,14 @@ fun DogListScreen(navConstroller: NavController) {
                     Text(text = "Doggos", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
                 },
                 navigationIcon = {
-                    val onProfileClick: () -> Unit = { navConstroller.navigate("settings") }
+                    val onProfileClick: () -> Unit = { navController.navigate("settings") }
 
                     IconButton(onClick = onProfileClick) {
                         Icon(Icons.Default.Settings, contentDescription = "Settings")
                     }
                 },
                 actions = {
-                    val onProfileClick: () -> Unit = { navConstroller.navigate("profile") }
+                    val onProfileClick: () -> Unit = { navController.navigate("profile") }
 
                     IconButton(onClick = onProfileClick) {
                         Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
@@ -92,13 +95,31 @@ fun DogListScreen(navConstroller: NavController) {
                 searchQuery = searchQuery,
                 onSearchQueryChange = { query ->
                     searchQuery = query
+                    buttonsEnabled = query.isNotEmpty()
                 },
                 placeholderText = "Poszukaj lub dodaj pieska 🐕",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                onSearchClick = { Log.d("Search","Search clicked") },
-                onAddClick = { Log.d("Add","Add clicked") },
+                onSearchClick = {
+                    appliedSearchQuery = searchQuery // Apply the search query
+                    Log.d("Search", "Search clicked")
+                },
+                onAddClick = {
+                    if (searchQuery.isNotEmpty() && !dogs.any { it.name.equals(searchQuery, ignoreCase = true) }) {
+                        val newDog = Dog(id = dogs.size + 1, name = searchQuery, breed = "Jack Russel")
+                        dogs = dogs + newDog
+                        searchQuery = "" // Czyszczenie pola
+                        isError = false
+                        buttonsEnabled = false
+                        Log.d("Add", "Dog added: $newDog")
+                    } else {
+                        isError = true
+                        Log.d("Add", "Dog already exists or name is empty")
+                    }
+                },
+                buttonsEnabled = buttonsEnabled,
+                isError = isError
             )
 
             Counter(
@@ -106,26 +127,34 @@ fun DogListScreen(navConstroller: NavController) {
             )
 
             LazyColumn {
-                val sortedDogs = dogs.sortedByDescending { it.isFavorite } // Ulubione na górze
+                // Filter dogs based on applied search query
+                val filteredDogs = if (appliedSearchQuery.isNotEmpty()) {
+                    dogs.filter { dog ->
+                        dog.name.contains(appliedSearchQuery, ignoreCase = true) ||
+                                dog.breed.contains(appliedSearchQuery, ignoreCase = true)
+                    }
+                } else {
+                    dogs
+                }
+
+                // Sort with favorites first
+                val sortedDogs = filteredDogs.sortedByDescending { it.isFavorite }
 
                 items(sortedDogs.size) { index ->
                     DogItem(
                         dog = sortedDogs[index],
                         onDogClick = {
-                            Log.d("DogItem", "Dog clicked: ${sortedDogs[index].name}")
-                            navConstroller.navigate("dog_detail/${sortedDogs[index].id}")
+                            navController.navigate("dog_detail/${sortedDogs[index].id}")
                         },
                         onFavoriteClick = { clickedDog ->
                             dogs = dogs.map {
-                                if (it.id == clickedDog.id) {
-                                    it.copy(isFavorite = !it.isFavorite)
-                                } else it
+                                if (it.id == clickedDog.id) it.copy(isFavorite = !it.isFavorite) else it
                             }
                         },
                         onDeleteClick = { clickedDog ->
                             dogs = dogs.filter { it.id != clickedDog.id }
                         },
-                        navController = navConstroller
+                        navController = navController
                     )
                 }
             }

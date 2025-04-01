@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,6 +49,15 @@ fun DogDetailScreen(navController: NavController, dogId: String) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Settings")
                     }
                 },
+                actions = {
+                    val onDeleteClick: () -> Unit = {
+
+                    }
+
+                    IconButton(onClick = onDeleteClick) {
+                        Icon(Icons.Default.Delete, contentDescription = "Delete")
+                    }
+                }
             )
         }
     ) { paddingValues ->
